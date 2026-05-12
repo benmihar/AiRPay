@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AiRPay Terminal</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="terminal-minimal">
+    <main class="terminal-minimal-shell">
+      <header class="terminal-minimal-header">
+        <div>
+          <button class="brand-home-button" data-action="home" type="button" aria-label="Вернуться на стартовую страницу">
+            <span class="minimal-kicker">AiRPay</span>
+            <span class="terminal-title">Платежный терминал</span>
+          </button>
+          <p class="minimal-subtitle">Лёгкий интерфейс оплаты с подтверждением через банковский сервис.</p>
+          <div class="terminal-access-badge" id="terminalAccessBadge">Проверка банковской авторизации</div>
+        </div>
+        <nav class="minimal-links">
+          <a class="minimal-link" href="./bank.html" target="_blank" rel="noreferrer">Банк</a>
+          <label class="theme-switch" title="Переключить тёмную тему">
+            <span>Тёмная тема</span>
+            <input type="checkbox" data-theme-toggle />
+            <span class="theme-slider"></span>
+          </label>
+        </nav>
+      </header>
+
+      <section class="minimal-progress">
+        <div class="minimal-step active" data-step-indicator="welcome">Старт</div>
+        <div class="minimal-step" data-step-indicator="category">Услуга</div>
+        <div class="minimal-step" data-step-indicator="details">Данные</div>
+        <div class="minimal-step" data-step-indicator="amount">Сумма</div>
+        <div class="minimal-step" data-step-indicator="confirm">Оплата</div>
+        <div class="minimal-step" data-step-indicator="receipt">Итог</div>
+      </section>
+
+      <section class="minimal-screen">
+        <div class="minimal-panel active" data-screen="welcome">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Добро пожаловать</p>
+            <h2>Выберите действие</h2>
+            <p>Оплата картой теперь подтверждается отдельно из банковского приложения.</p>
+          </div>
+          <div class="hero-grid">
+            <button class="hero-card primary" data-action="start-payment" type="button">
+              <span class="hero-icon">+</span>
+              <span>
+                <strong>Новый платеж</strong>
+                <small>Пошаговый сценарий оплаты услуг</small>
+              </span>
+            </button>
+            <button class="hero-card" data-action="format-error" type="button">
+              <span class="hero-icon">!</span>
+              <span>
+                <strong>Проверка формата</strong>
+                <small>Показать сценарий некорректного ввода</small>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="access">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Доступ ограничен</p>
+            <h2>Сначала войдите в банковский сервис</h2>
+            <p>Платежная система терминала активируется только после успешной авторизации пользователя в банковском приложении.</p>
+          </div>
+          <div class="minimal-status-card">
+            <div class="minimal-summary-row"><span>Статус</span><strong>Нет активной банковской сессии</strong></div>
+            <div class="minimal-summary-row"><span>Что нужно сделать</span><strong>Авторизоваться в банковском сервисе</strong></div>
+          </div>
+          <div class="field-row">
+            <a class="primary-button link-button" href="./bank.html" target="_blank" rel="noreferrer">Открыть банковский сервис</a>
+            <button class="secondary-button" id="checkAccessButton" type="button">Проверить доступ</button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="category">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Шаг 1</p>
+            <h2>Категория платежа</h2>
+            <p>Выберите услугу, которую нужно оплатить через терминал.</p>
+          </div>
+          <div class="category-grid" id="categoryGrid"></div>
+          <div class="field-row">
+            <button class="secondary-button" type="button" data-nav="welcome">Назад</button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="provider">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Шаг 2</p>
+            <h2>Поставщик</h2>
+            <p id="providerHint">Выберите поставщика услуги.</p>
+          </div>
+          <div class="provider-list" id="providerList"></div>
+          <div class="field-row">
+            <button class="secondary-button" type="button" data-nav="category">Назад</button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="details">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Шаг 3</p>
+            <h2>Реквизиты услуги</h2>
+            <p id="detailsHint">Введите реквизиты услуги с обычной клавиатуры.</p>
+          </div>
+          <form class="terminal-form minimal-single-form" id="detailsForm">
+            <label class="field">
+              <span id="detailsLabel">Реквизит</span>
+              <input id="accountInput" type="text" autocomplete="off" placeholder="Введите данные" />
+            </label>
+            <div class="field-row">
+              <button class="secondary-button" type="button" data-nav="provider">Назад</button>
+              <button class="secondary-button" id="clearAccount" type="button">Очистить</button>
+              <button class="primary-button" type="submit">Продолжить</button>
+            </div>
+            <p class="form-error" id="detailsError"></p>
+          </form>
+        </div>
+
+        <div class="minimal-panel" data-screen="amount">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Шаг 4</p>
+            <h2>Сумма платежа</h2>
+            <p>Комиссия рассчитывается автоматически.</p>
+          </div>
+          <form class="amount-form" id="amountForm">
+            <label class="field">
+              <span>Сумма, ₽</span>
+              <input id="amountInput" type="number" min="1" step="1" placeholder="500" />
+            </label>
+
+            <div class="summary-card">
+              <div class="summary-row">
+                <span>Платеж</span>
+                <strong id="summaryPayment">0 ₽</strong>
+              </div>
+              <div class="summary-row">
+                <span>Комиссия</span>
+                <strong id="summaryFee">0 ₽</strong>
+              </div>
+              <div class="summary-row total">
+                <span>Итого</span>
+                <strong id="summaryTotal">0 ₽</strong>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <button class="secondary-button" type="button" data-nav="details">Назад</button>
+              <button class="primary-button" type="submit">Продолжить</button>
+            </div>
+            <p class="form-error" id="amountError"></p>
+          </form>
+        </div>
+
+        <div class="minimal-panel" data-screen="confirm">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Шаг 5</p>
+            <h2>Подтверждение оплаты</h2>
+            <p>Терминал отправит заявку в банковское приложение для подтверждения операции.</p>
+          </div>
+
+          <div class="minimal-split">
+            <div class="ticket-card" id="confirmCard"></div>
+
+            <div class="payment-box">
+              <p class="payment-subtitle">Подтверждение из банковского приложения</p>
+              <div class="minimal-note">
+                Терминал создаст запрос. Пользователь входит в отдельное банковское приложение, выбирает счет и подтверждает или отклоняет операцию там.
+              </div>
+
+              <div class="field-row">
+                <button class="secondary-button" id="cancelPayment" type="button">Отмена</button>
+                <button class="primary-button" id="completePayment" type="button">Отправить в банк</button>
+              </div>
+              <p class="form-error" id="paymentError"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="awaiting">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Ожидание</p>
+            <h2>Запрос отправлен в банк</h2>
+            <p>Откройте банковское приложение и подтвердите оплату там.</p>
+          </div>
+          <div class="minimal-status-card" id="awaitingCard"></div>
+          <div class="field-row">
+            <a class="primary-button link-button" href="./bank.html" target="_blank" rel="noreferrer">Открыть банк</a>
+            <button class="secondary-button" id="refreshStatusButton" type="button">Проверить статус</button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="receipt">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Готово</p>
+            <h2>Электронный чек</h2>
+            <p>Операция завершена и зафиксирована в системе.</p>
+          </div>
+          <div class="receipt-card" id="receiptCard"></div>
+          <div class="field-row">
+            <button class="secondary-button" id="newPaymentButton" type="button">Новый платеж</button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="declined">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Отклонено</p>
+            <h2>Банк не подтвердил операцию</h2>
+            <p>Пользователь отклонил заявку в банковском приложении или счет не прошел проверку.</p>
+          </div>
+          <div class="minimal-status-card declined" id="declinedCard"></div>
+          <div class="field-row">
+            <button class="secondary-button" id="retryPaymentButton" type="button">Новый платеж</button>
+          </div>
+        </div>
+
+        <div class="minimal-panel" data-screen="error">
+          <div class="minimal-copy">
+            <p class="screen-kicker">Ошибка</p>
+            <h2>Некорректные данные</h2>
+            <p>Проверьте формат ввода и начните заново.</p>
+          </div>
+          <div class="minimal-note">
+            Номер реквизита не соответствует формату поставщика услуги.
+          </div>
+          <div class="field-row">
+            <button class="secondary-button" id="backFromError" type="button">На главный экран</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./payments-db.js"></script>
+    <script src="./shared.js"></script>
+    <script src="./theme.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
