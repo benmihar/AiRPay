@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AiRPay Bank</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="bank-app-body">
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <div class="brand-block">
+          <div class="brand-logo">B</div>
+          <div>
+            <p class="brand-kicker">Банковое приложение</p>
+            <h1>AiRPay Bank</h1>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <p class="status-label">Вход клиента</p>
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            Отдельная авторизация
+          </div>
+          <p class="status-text">Подтверждение платежей выполняется только после входа в банковский аккаунт.</p>
+        </div>
+
+        <div class="sidebar-section">
+          <p class="sidebar-title">Переходы</p>
+          <div class="bank-nav-links">
+            <a class="secondary-button link-button" href="./index.html">К терминалу</a>
+            <label class="theme-switch compact" title="Переключить тёмную тему">
+              <span>Тёмная тема</span>
+              <input type="checkbox" data-theme-toggle />
+              <span class="theme-slider"></span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <main class="terminal">
+        <header class="terminal-topbar">
+          <div>
+            <p class="eyebrow">Экран клиента банка</p>
+            <h2>Подтверждение операций терминала</h2>
+          </div>
+        </header>
+
+        <section class="terminal-screen admin-page-screen">
+          <div class="screen-copy">
+            <p class="screen-kicker">Secure Flow</p>
+            <h3>Счета, баланс и подтверждение операций</h3>
+            <p>После входа пользователь банка видит свои счета и подтверждает заявки, созданные в терминале.</p>
+          </div>
+
+          <div class="admin-auth-card visible" id="bankLoginCard">
+            <h4>Вход в банковский аккаунт</h4>
+            <form class="admin-form" id="bankLoginForm">
+              <label class="field">
+                <span>Логин</span>
+                <input id="bankLoginInput" type="text" placeholder="Введите логин" autocomplete="username" />
+              </label>
+              <label class="field">
+                <span>Пароль</span>
+                <input id="bankPasswordInput" type="password" placeholder="Введите пароль" autocomplete="current-password" />
+              </label>
+              <div class="field-row">
+                <button class="primary-button" type="submit">Войти</button>
+              </div>
+              <p class="form-error" id="bankAuthError"></p>
+            </form>
+          </div>
+
+          <div class="bank-dashboard" id="bankDashboard">
+            <div class="bank-user-hero" id="bankUserHero"></div>
+
+            <div class="admin-grid bank-dashboard-grid">
+              <div class="admin-card">
+                <div class="admin-card-head">
+                  <h4>Мои счета</h4>
+                </div>
+                <div class="account-list" id="accountList"></div>
+
+                <div class="admin-card-head bank-section-head">
+                  <h4>Последние действия</h4>
+                </div>
+                <div class="history-list" id="bankHistoryList"></div>
+              </div>
+
+              <div class="admin-card">
+                <div class="admin-card-head">
+                  <h4>Ожидают подтверждения</h4>
+                  <span class="security-pill" id="pendingCountBadge">0 запросов</span>
+                </div>
+                <div class="pending-list" id="pendingList"></div>
+                <div class="pending-details" id="pendingDetails"></div>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-head">
+                <h4>Обращение на возврат</h4>
+                <span class="security-pill" id="refundRequestCountBadge">0 обращений</span>
+              </div>
+              <div class="refund-layout">
+                <div class="refund-transaction-list" id="refundTransactionList"></div>
+                <div class="refund-request-details" id="refundRequestDetails"></div>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <button class="ghost-button" id="bankLogoutButton" type="button">Выйти</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./payments-db.js"></script>
+    <script src="./shared.js"></script>
+    <script src="./theme.js"></script>
+    <script src="./bank.js"></script>
+  </body>
+</html>

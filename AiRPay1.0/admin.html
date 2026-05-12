@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AiRPay Admin</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <div class="brand-block">
+          <div class="brand-logo">A</div>
+          <div>
+            <p class="brand-kicker">Скрытая страница</p>
+            <h1>AiRPay Admin</h1>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <p class="status-label">Роль</p>
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            Администратор
+          </div>
+          <p class="status-text">Просмотр журнала, статусов заявок, шифрования и выполнение возвратов.</p>
+        </div>
+
+        <div class="sidebar-section">
+          <p class="sidebar-title">Вход</p>
+          <div class="bank-nav-links">
+            <a class="secondary-button link-button" href="./index.html">Терминал</a>
+            <a class="secondary-button link-button" href="./bank.html">Банк</a>
+            <label class="theme-switch compact" title="Переключить тёмную тему">
+              <span>Тёмная тема</span>
+              <input type="checkbox" data-theme-toggle />
+              <span class="theme-slider"></span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <main class="terminal">
+        <header class="terminal-topbar">
+          <div>
+            <p class="eyebrow">Экран администратора</p>
+            <h2>Журнал операций и возвраты</h2>
+          </div>
+        </header>
+
+        <section class="terminal-screen admin-page-screen">
+          <div class="screen-copy">
+            <p class="screen-kicker">Control Room</p>
+            <h3>Операции терминала и банковского контура</h3>
+            <p>Панель объединяет заявки в банк, подтверждения из банковского приложения и возвраты.</p>
+          </div>
+
+          <div class="admin-auth-card visible" id="adminLoginCard">
+            <h4>Вход администратора</h4>
+            <form class="admin-form" id="adminLoginForm">
+              <label class="field">
+                <span>Логин</span>
+                <input id="adminLoginInput" type="text" placeholder="Введите логин" autocomplete="username" />
+              </label>
+              <label class="field">
+                <span>Пароль</span>
+                <input id="adminPasswordInput" type="password" placeholder="Введите пароль" autocomplete="current-password" />
+              </label>
+              <div class="field-row">
+                <button class="primary-button" type="submit">Войти</button>
+              </div>
+              <p class="form-error" id="adminAuthError"></p>
+            </form>
+          </div>
+
+          <div class="admin-panel" id="adminPanel">
+            <div class="admin-banner">
+              <div>
+                <p class="screen-kicker">Режим наблюдения</p>
+                <h4>Журнал, шифрование и возврат</h4>
+              </div>
+              <div class="field-row">
+                <button class="ghost-button" id="adminLogoutButton" type="button">Выйти</button>
+              </div>
+            </div>
+
+            <div class="admin-stats-grid" id="adminStatsGrid"></div>
+
+            <div class="admin-grid">
+              <div class="admin-card">
+                <div class="admin-card-head">
+                  <h4>Операции</h4>
+                  <span class="bank-chip" id="transactionCountBadge">0 записей</span>
+                </div>
+                <div class="transaction-list" id="transactionList"></div>
+              </div>
+
+              <div class="admin-card">
+                <div class="admin-card-head">
+                  <h4>Детали операции</h4>
+                  <span class="security-pill">Audit</span>
+                </div>
+                <div class="encryption-panel" id="encryptionDetails">
+                  <p class="status-text">Пока нет операций для просмотра.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./payments-db.js"></script>
+    <script src="./shared.js"></script>
+    <script src="./theme.js"></script>
+    <script src="./admin.js"></script>
+  </body>
+</html>
